@@ -3,6 +3,12 @@ const mongoose = require('mongoose');
 const BlogPostSchema = mongoose.Schema({
   title: String,
   body: String,
+  userName: String,
+  datePosted: {
+    type: Date,
+    default: new Date(),
+  },
+  image: String,
 });
 
 const BlogPost = mongoose.model('BlogPost', BlogPostSchema);
