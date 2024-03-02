@@ -1,57 +1,33 @@
 const express = require('express');
-const path = require('path');
 const ejs = require('ejs');
 
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
-
-function validateMiddleWare(req, res, next) {
-  if (req.files == null || req.body.title == null || req.body.title == null) {
-    return res.redirect('/create');
-  }
-  next();
-}
 
 const app = new express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(fileUpload());
-app.use('/posts/store', validateMiddleWare);
+app.use('/posts/store', require('./middleware/validateMiddleware'));
 
 const mongoose = require('mongoose');
-const BlogPost = require('./models/BlogPost');
+const newPostController = require('./controllers/newPost');
+const aboutController = require('./controllers/aboutController');
+const contactController = require('./controllers/contactController');
+const getPostController = require('./controllers/getPostController');
+const createPostController = require('./controllers/createPostController');
+const homeController = require('./controllers/homeController');
 
 mongoose.connect('mongodb://localhost/my_database');
 // Template Engine
 app.set('view engine', 'ejs');
-app.get('/about', (req, res) => {
-  res.render('about');
-});
-app.get('/contact', (req, res) => {
-  res.render('contact');
-});
-app.get('/post/:id', async (req, res) => {
-  const blogPost = await BlogPost.find({ _id: req.params.id });
-  res.render('post', { blogPost });
-});
-app.get('/create', (req, res) => {
-  res.render('create');
-});
-app.post('/posts/store', async (req, res) => {
-  const { image } = req.files;
-  image.mv(path.resolve(__dirname, 'public/img', image.name), async (error) => {
-    await BlogPost.create({
-      ...req.body,
-      image: `/img/${image.name}`,
-    });
-    res.redirect('/');
-  });
-});
-app.get('/', async (req, res) => {
-  const blogPosts = await BlogPost.find({});
-  res.render('index', { blogPosts });
-});
+app.get('/about', aboutController);
+app.get('/contact', contactController);
+app.get('/post/:id', getPostController);
+app.get('/create', newPostController);
+app.post('/posts/store', createPostController);
+app.get('/', homeController);
 // Routing }
 
 app.listen(3006, () => {
