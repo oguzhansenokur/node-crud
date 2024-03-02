@@ -18,6 +18,10 @@ const contactController = require('./controllers/contactController');
 const getPostController = require('./controllers/getPostController');
 const createPostController = require('./controllers/createPostController');
 const homeController = require('./controllers/homeController');
+const newUserController = require('./controllers/newUser');
+const storeUserController = require('./controllers/storeUserController');
+const loginController = require('./controllers/loginController');
+const loginProcessController = require('./controllers/loginProcessController');
 
 mongoose.connect('mongodb://localhost/my_database');
 // Template Engine
@@ -28,6 +32,11 @@ app.get('/post/:id', getPostController);
 app.get('/create', newPostController);
 app.post('/posts/store', createPostController);
 app.get('/', homeController);
+app.get('/auth/register', newUserController);
+app.post('/auth/register', storeUserController);
+app.get('/auth/login', loginController);
+app.post('/auth/login', loginProcessController);
+
 // Routing }
 
 app.listen(3006, () => {
