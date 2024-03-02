@@ -5,11 +5,19 @@ const ejs = require('ejs');
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
 
+function validateMiddleWare(req, res, next) {
+  if (req.files == null || req.body.title == null || req.body.title == null) {
+    return res.redirect('/create');
+  }
+  next();
+}
+
 const app = new express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(fileUpload());
+app.use('/posts/store', validateMiddleWare);
 
 const mongoose = require('mongoose');
 const BlogPost = require('./models/BlogPost');
