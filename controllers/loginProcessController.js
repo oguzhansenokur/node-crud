@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
     if (!isMatch) {
       return res.status(400).send('Invalid password');
     }
-
+    req.session.userId = user._id;
     res.redirect('/');
   } catch (error) {
     res.status(500).send(error.message);
