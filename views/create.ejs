@@ -35,6 +35,10 @@
                                 <div class="form-floating">
                                     <textarea class="form-control" name="body" id="body" placeholder="Enter your message here..." style="height: 12rem" ></textarea>
                                     <label for="body">Body</label>
+                                    <script> $('#body').summernote({
+                                        placeholder: 'Hello bootstrap 4', tabsize: 2,
+                                        height: 200 });
+                                        </script>
                                     <div class="invalid-feedback" >A message is required.</div>
                                 </div>
                                 <br />
